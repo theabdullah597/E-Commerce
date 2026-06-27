@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop - Capstone</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    .product-badge{ position:absolute; top:12px; left:12px; background:rgba(0,0,0,.65); color:#fff; padding:6px 12px; border-radius:999px; font-size:12px; }
+    .product-card .card-body{ padding: 16px; }
+    #toast{ position: fixed; bottom: 18px; right: 18px; z-index: 9999; opacity:0; transform: translateY(10px); transition: all .2s ease; }
+    #toast.show{ opacity:1; transform: translateY(0); }
+  </style>
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">Shop<span class="text-warning">Capstone</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="shop.html">Shop</a></li>
+          <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
+        </ul>
+        <a href="cart.html" class="btn btn-dark position-relative">
+          <i class="bi bi-cart"></i>
+          <span class="ms-1">Cart</span>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark" id="cart-badge">0</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-md-5">
+        <label class="form-label">Search</label>
+        <input id="search-input" type="text" class="form-control" placeholder="Search products...">
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label">Category</label>
+        <select id="category-filter" class="form-select">
+          <option value="all">All Categories</option>
+          <option value="Home">Home</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Sports">Sports</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Accessories">Accessories</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-2">
+        <label class="form-label">Sort</label>
+        <select id="price-sort" class="form-select">
+          <option value="default">Default</option>
+          <option value="low-to-high">Low → High</option>
+          <option value="high-to-low">High → Low</option>
+          <option value="rating-high">Rating</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-2">
+        <label class="form-label">Min Rating</label>
+        <select id="min-rating" class="form-select">
+          <option value="0">Any</option>
+          <option value="4">4.0+</option>
+          <option value="4.5">4.5+</option>
+        </select>
+      </div>
+      <div class="col-12 d-flex justify-content-md-end">
+        <button id="reset-filters" class="btn btn-outline-dark"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between mt-4 mb-3 flex-wrap gap-2">
+      <h2 class="h4 mb-0">Products</h2>
+      <div class="text-muted small"><span id="results-count">0</span> result(s)</div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="products-grid"></div>
+  </main>
+
+  <div id="toast" class="toast align-items-center text-white bg-success border-0" role="alert">
+    <div class="d-flex">
+      <div class="toast-body" id="toast-msg">Toast</div>
+    </div>
+  </div>
+
+  <footer class="border-top bg-white">
+    <div class="container py-3 text-muted small d-flex justify-content-center">
+      © <span id="year"></span> ShopCapstone
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/shop.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Update results-count by observing render; easiest: override render by reading DOM after shop apply.
+    const countEl = document.getElementById('results-count');
+    const obs = new MutationObserver(() => {
+      const grid = document.getElementById('products-grid');
+      if (!countEl || !grid) return;
+      countEl.textContent = grid.children.length;
+    });
+    obs.observe(document.getElementById('products-grid'), { childList: true, subtree: false });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
